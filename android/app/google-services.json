@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "903321125150",
+    "project_id": "tutor-app-276bf",
+    "storage_bucket": "tutor-app-276bf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903321125150:android:6c3353c9a65f2d9549890f",
+        "android_client_info": {
+          "package_name": "com.example.student_panel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC4HqWZZbzGOSTuUj9Vw0EjpmpEf00LxM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903321125150:android:898eecf9bbcbece449890f",
+        "android_client_info": {
+          "package_name": "com.example.teacher_panel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC4HqWZZbzGOSTuUj9Vw0EjpmpEf00LxM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
