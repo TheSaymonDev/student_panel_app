@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:student_panel/screens/quiz_list_screen/models/quiz_model.dart';
 import 'package:student_panel/utils/app_colors.dart';
 
 class OngoingExamCard extends StatelessWidget {
-  const OngoingExamCard({super.key});
+  const OngoingExamCard({
+    super.key,
+    required this.quizItem, required this.onPressed,
+  });
+
+  final QuizModel quizItem;
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +34,10 @@ class OngoingExamCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 6.h,
                 children: [
-                  Text('General Knowledge',
-                      style: Theme.of(context).textTheme.bodyMedium),
-                  Text('History of Bangladesh',
+                  Text('Subject Name: ${quizItem.subjectName}', style: Theme.of(context).textTheme.bodyMedium),
+                  Text('Topic Name: ${quizItem.topicName}',
                       style: Theme.of(context).textTheme.titleSmall),
-                  Text('Duration: 20 Min',
+                  Text('Duration: ${quizItem.timeDuration} Min',
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                           color: context.isDarkMode
                               ? AppColors.lightGreyClr
@@ -39,7 +45,7 @@ class OngoingExamCard extends StatelessWidget {
                 ],
               ),
             ),
-            ElevatedButton(onPressed: () {}, child: Text('Start'))
+            ElevatedButton(onPressed: onPressed, child: Text('Start'))
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:student_panel/screens/registration_screen/models/class_model.dart';
 import 'package:student_panel/services/firebase_service.dart';
 import 'package:student_panel/utils/app_const_functions.dart';
 
@@ -9,21 +10,39 @@ class RegistrationController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final schoolNameController = TextEditingController();
-  final classNameController = TextEditingController();
-  final classCodeController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  List<ClassModel> classes = [];
+  String? selectedClass;
+
+  Future<void> fetchClasses() async {
+    final response = await FirebaseService().readClasses();
+    if (response['success'] == true) {
+      final data = response['data'];
+      if (data.docs.isNotEmpty) {
+        classes = data.docs.map<ClassModel>((doc) {
+          return ClassModel.fromFireStore(doc.data(), doc.id);
+        }).toList();
+      } else {
+        AppConstFunctions.customErrorMessage(message: 'No class found');
+      }
+    } else {
+      AppConstFunctions.customErrorMessage(
+          message: response['message'] ?? 'Something went wrong');
+    }
+    update(); // GetBuilder রিফ্রেশ করার জন্য
+  }
+
+
   Future<bool> registerUser() async {
     _setLoading(true);
-
     final response = await FirebaseService().register(
       email: emailController.text,
       password: passwordController.text.trim(),
       name: nameController.text,
       schoolName: schoolNameController.text,
-      className: classNameController.text,
-      classCode: classCodeController.text,
+      className: selectedClass!,
     );
 
     _setLoading(false);
@@ -47,4 +66,5 @@ class RegistrationController extends GetxController {
     isLoading = value;
     update();
   }
+
 }

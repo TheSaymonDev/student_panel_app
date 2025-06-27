@@ -7,6 +7,8 @@ class AppRoutes {
   static const resetPasswordScreen = '/reset_password_screen';
   static const homeScreen = '/home_screen';
   static const subjectListScreen = '/subject_list_screen';
-  static const topicListScreen = '/topic_list_screen';
-  static const quizScreen = '/quiz_screen';
+  static const quizListScreen = '/quiz_list_screen';
+  static const examScreen = '/exam_screen';
+  static const resultScreen = '/result_screen';
+  static const resultHistoryScreen = '/result_history_screen';
 }

@@ -11,10 +11,11 @@ void main() async {
   await SharedPreferencesService().init(); // Initialize SharedPreferences
   final hasInternet = await ConnectivityService.isConnected();
   final userId = SharedPreferencesService().getUserId();
+  final classId = SharedPreferencesService().getClassId();
   runApp(
     MyApp(
       initialRoute: hasInternet
-          ? (userId.isNotEmpty ? AppRoutes.homeScreen : AppRoutes.authScreen)
+          ? (userId.isNotEmpty && classId.isNotEmpty ? AppRoutes.homeScreen : AppRoutes.authScreen)
           : AppRoutes.noInternetScreen,
     ),
   );

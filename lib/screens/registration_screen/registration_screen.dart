@@ -13,9 +13,14 @@ import 'package:student_panel/widgets/custom_elevated_btn.dart';
 import 'package:student_panel/widgets/custom_outlined_btn.dart';
 import 'package:student_panel/widgets/custom_text_form_field.dart';
 
-class RegistrationScreen extends StatelessWidget {
-  RegistrationScreen({super.key});
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
 
+  @override
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
+}
+
+class _RegistrationScreenState extends State<RegistrationScreen> {
   final _registrationController = Get.find<RegistrationController>();
 
   @override
@@ -55,17 +60,36 @@ class RegistrationScreen extends StatelessWidget {
                   validator: AppValidators.requiredValidator,
                 ),
                 Gap(12.h),
-                CustomTextFormField(
-                  controller: _registrationController.classNameController,
-                  hintText: 'Class',
-                  validator: AppValidators.requiredValidator,
+                GetBuilder<RegistrationController>(
+                  initState: (_) => _registrationController.fetchClasses(),
+                  builder: (controller) {
+                    return DropdownButtonFormField<String>(
+
+                      value: controller.selectedClass,
+                      decoration: InputDecoration(
+
+                        hintText: 'Select Class',
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
+                      ),
+                      validator: (value) =>
+                      value == null || value.isEmpty ? 'Class is required' : null,
+                      items: controller.classes
+                          .map((cls) => DropdownMenuItem<String>(
+                        value: cls.className,
+                        child: Text(cls.className ?? ''),
+                      ))
+                          .toList(),
+                      onChanged: (value) {
+                       setState(() {
+                         controller.selectedClass = value;
+                         print(controller.selectedClass);
+                       });
+                      },
+                    );
+                  },
                 ),
-                Gap(12.h),
-                CustomTextFormField(
-                  controller: _registrationController.classCodeController,
-                  hintText: 'Class Code',
-                  validator: AppValidators.requiredValidator,
-                ),
+
                 Gap(12.h),
                 CustomTextFormField(
                   controller: _registrationController.emailController,

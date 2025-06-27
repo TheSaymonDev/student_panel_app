@@ -50,6 +50,7 @@ dependencies:
   google_nav_bar: ^5.0.7
   animated_toggle_switch: ^0.8.3
   fl_chart: ^0.69.2
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:

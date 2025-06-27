@@ -5,10 +5,12 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:student_panel/localizations/language_controller.dart';
 import 'package:student_panel/routes/app_routes.dart';
+import 'package:student_panel/screens/home_screen/controllers/user_info_controller.dart';
 import 'package:student_panel/services/firebase_service.dart';
 import 'package:student_panel/services/shared_preference_service.dart';
 import 'package:student_panel/themes/theme_controller.dart';
 import 'package:student_panel/utils/app_colors.dart';
+import 'package:student_panel/utils/app_const_functions.dart';
 import 'package:student_panel/widgets/custom_gradient_container.dart';
 import 'package:student_panel/widgets/custom_switch.dart';
 
@@ -39,119 +41,122 @@ class _HomeEndDrawerState extends State<HomeEndDrawer> {
   }
 
   Widget _buildProfileInfo(BuildContext context) {
-    final String studentName = 'MD. SAYMON';
-    final String schoolName =
-        'ABC Govt High School';
-    final String className = 'Class 9';
-    final String email = 'student@gmail.com';
-    final String classCode = '123456';
     final String profileImageUrl =
         'https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg'; // Replace with actual image URL
 
     return CustomGradientContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Gap(16.h),
-          CircleAvatar(
-            radius: 50.r,
-            backgroundImage: NetworkImage(profileImageUrl),
-            backgroundColor: AppColors.primaryClr.withValues(alpha: 0.1),
-          ),
-          Gap(8.h),
-          Text(
-            studentName,
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(color: Colors.white),
-          ),
-          Gap(12.h),
-          Row(
-            children: [
-              Icon(
-                Icons.school,
-                color: Colors.white,
-                size: 20.sp,
-              ),
-              Gap(4.w),
-              Expanded(
-                flex: 5,
-                child: Text(
-                  schoolName,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: Colors.white),
-                  overflow: TextOverflow.ellipsis, // Text কাটার জন্য
-                  maxLines: 2, // সর্বোচ্চ ২ লাইন পর্যন্ত দেখাবে
-                ),
-              ),
-              Gap(8.w),
-              Icon(
-                Icons.class_,
-                color: Colors.white,
-                size: 20.sp,
-              ),
-              Gap(4.w),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  className,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: Colors.white),
-                  overflow: TextOverflow.ellipsis, // Text কাটার জন্য
-                  maxLines: 2, // সর্বোচ্চ ২ লাইন পর্যন্ত দেখাবে
-                ),
-              ),
-            ],
-          ),
-          Gap(4.h),
-          Row(
-            children: [
-              Icon(
-                Icons.email,
-                color: Colors.white,
-                size: 20.sp,
-              ),
-              Gap(4.w),
-              Expanded(
-                flex: 5,
-                child: Text(
-                  email,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: Colors.white),
-                  overflow: TextOverflow.ellipsis, // Text কাটার জন্য
-                  maxLines: 2, // সর্বোচ্চ ২ লাইন পর্যন্ত দেখাবে
-                ),
-              ),
-              Gap(8.w),
-              Icon(
-                Icons.code,
-                color: Colors.white,
-                size: 20.sp,
-              ),
-              Gap(4.w),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  classCode,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: Colors.white),
-                  overflow: TextOverflow.ellipsis, // Text কাটার জন্য
-                  maxLines: 2, // সর্বোচ্চ ২ লাইন পর্যন্ত দেখাবে
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      child: GetBuilder<UserInfoController>(
+          builder: (controller) => controller.isLoading
+              ? AppConstFunctions.customCircularProgressIndicator
+              : controller.userData == null
+                  ? Center(
+                      child: Text('No data found'),
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Gap(16.h),
+                        CircleAvatar(
+                          radius: 50.r,
+                          backgroundImage: NetworkImage(profileImageUrl),
+                          backgroundColor:
+                              AppColors.primaryClr.withValues(alpha: 0.1),
+                        ),
+                        Gap(8.h),
+                        Text(
+                          controller.userData!.name ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(color: Colors.white),
+                        ),
+                        Gap(12.h),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.school,
+                              color: Colors.white,
+                              size: 20.sp,
+                            ),
+                            Gap(4.w),
+                            Expanded(
+                              flex: 5,
+                              child: Text(
+                                controller.userData!.schoolName ?? '',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(color: Colors.white),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                              ),
+                            ),
+                            Gap(8.w),
+                            Icon(
+                              Icons.class_,
+                              color: Colors.white,
+                              size: 20.sp,
+                            ),
+                            Gap(4.w),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                controller.userData!.className ?? '',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(color: Colors.white),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Gap(4.h),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.email,
+                              color: Colors.white,
+                              size: 20.sp,
+                            ),
+                            Gap(4.w),
+                            Expanded(
+                              flex: 5,
+                              child: Text(
+                                controller.userData!.email ?? '',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(color: Colors.white),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                              ),
+                            ),
+                            Gap(8.w),
+                            Icon(
+                              Icons.code,
+                              color: Colors.white,
+                              size: 20.sp,
+                            ),
+                            Gap(4.w),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                controller.userData!.classCode ?? '',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(color: Colors.white),
+                                overflow:
+                                    TextOverflow.ellipsis, // Text কাটার জন্য
+                                maxLines: 2, // সর্বোচ্চ ২ লাইন পর্যন্ত দেখাবে
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
     );
   }
 

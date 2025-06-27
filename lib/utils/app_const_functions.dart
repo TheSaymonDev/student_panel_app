@@ -25,6 +25,16 @@ class AppConstFunctions{
         colorText: Colors.white);
   }
 
+  static SnackbarController customWarningMessage({required dynamic message}) {
+    return Get.snackbar('Warning', message,
+        icon:  const Icon(Icons.warning_amber, color: Colors.white),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: AppColors.primaryClr,
+        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+        duration: const Duration(seconds: 3),
+        colorText: Colors.white);
+  }
+
   static final customCircularProgressIndicator =
   SpinKitHourGlass(color: AppColors.primaryClr, size: 35.0.r);
 }

@@ -22,6 +22,18 @@ class SharedPreferencesService{
     _prefs.remove('userId');
   }
 
+  void saveClassId(String userId) {
+    _prefs.setString('classId', userId);
+  }
+
+  String getClassId() {
+    return _prefs.getString('classId') ?? '';
+  }
+
+  void clearClassId() {
+    _prefs.remove('classId');
+  }
+
   void saveTheme(String theme) {
     _prefs.setString('themeKey', theme);
   }

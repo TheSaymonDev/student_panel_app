@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:get/get.dart';
 import 'package:student_panel/screens/registration_screen/controllers/registration_controller.dart';
 import 'package:student_panel/services/firebase_service.dart';
@@ -14,8 +13,7 @@ class EmailVerificationController extends GetxController {
       email: registrationController.emailController.text,
       name: registrationController.nameController.text,
       schoolName: registrationController.schoolNameController.text,
-      className: registrationController.classNameController.text,
-      classCode: registrationController.classCodeController.text,
+      className: registrationController.selectedClass!,
     );
 
     _setLoading(false);

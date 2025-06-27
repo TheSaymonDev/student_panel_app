@@ -24,9 +24,11 @@ class LogInController extends GetxController {
     _setLoading(false);
 
     if (response['success'] == true) {
-      final user = response['data'];
-      AppConstFunctions.customSuccessMessage(message: 'Successfully Logged In');
-      SharedPreferencesService().saveUserId(user.uid);
+      final userId = response['userId'];
+      final classId = response['classId'];
+      AppConstFunctions.customSuccessMessage(message: response['message']);
+      SharedPreferencesService().saveUserId(userId);
+      SharedPreferencesService().saveClassId(classId);
       return true;
     } else {
       AppConstFunctions.customErrorMessage(
