@@ -51,6 +51,8 @@ dependencies:
   animated_toggle_switch: ^0.8.3
   fl_chart: ^0.69.2
   intl: ^0.20.2
+  firebase_messaging: ^15.2.7
+  flutter_local_notifications: ^19.3.0
 
 dev_dependencies:
   flutter_test:

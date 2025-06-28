@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:student_panel/services/firebase_service.dart';
+import 'package:student_panel/services/notification_service.dart';
 import 'package:student_panel/services/shared_preference_service.dart';
 import 'package:student_panel/utils/app_const_functions.dart';
 
@@ -29,6 +30,7 @@ class LogInController extends GetxController {
       AppConstFunctions.customSuccessMessage(message: response['message']);
       SharedPreferencesService().saveUserId(userId);
       SharedPreferencesService().saveClassId(classId);
+      await NotificationService.saveTokenToDatabase(userId: userId, classId: classId);
       return true;
     } else {
       AppConstFunctions.customErrorMessage(
