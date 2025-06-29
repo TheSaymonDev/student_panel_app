@@ -164,7 +164,7 @@ class _HomeEndDrawerState extends State<HomeEndDrawer> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: ListTile(
-        onTap: () {},
+        onTap: () => Get.toNamed(AppRoutes.leaderboardScreen),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r),
             side: BorderSide(

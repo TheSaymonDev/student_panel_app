@@ -11,4 +11,5 @@ class AppRoutes {
   static const examScreen = '/exam_screen';
   static const resultScreen = '/result_screen';
   static const resultHistoryScreen = '/result_history_screen';
+  static const leaderboardScreen = '/leaderboard_screen';
 }

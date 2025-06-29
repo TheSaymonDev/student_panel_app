@@ -5,9 +5,10 @@ import 'package:student_panel/screens/email_verification_screen/bindings/email_v
 import 'package:student_panel/screens/email_verification_screen/email_verification_screen.dart';
 import 'package:student_panel/screens/exam_screen/bindings/exam_binding.dart';
 import 'package:student_panel/screens/exam_screen/exam_screen.dart';
-import 'package:student_panel/screens/explore_screen/bindings/explore_binding.dart';
 import 'package:student_panel/screens/home_screen/bindings/home_binding.dart';
 import 'package:student_panel/screens/home_screen/home_screen.dart';
+import 'package:student_panel/screens/leaderboard_screen/bindings/leaderboard_binding.dart';
+import 'package:student_panel/screens/leaderboard_screen/leaderboard_screen.dart';
 import 'package:student_panel/screens/log_in_screen/bindings/log_in_binding.dart';
 import 'package:student_panel/screens/log_in_screen/log_in_screen.dart';
 import 'package:student_panel/screens/quiz_list_screen/bindings/quiz_list_binding.dart';
@@ -52,10 +53,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.homeScreen,
       page: () => HomeScreen(),
-      bindings: [
-        HomeBinding(),
-        ExploreBinding(),
-      ],
+      binding: HomeBinding(),
     ),
     GetPage(
       name: AppRoutes.subjectListScreen,
@@ -81,6 +79,11 @@ class AppPages {
       name: AppRoutes.resultHistoryScreen,
       page: () => ResultHistoryScreen(),
       binding: ResultHistoryBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.leaderboardScreen,
+      page: () => LeaderboardScreen(),
+      binding: LeaderboardBinding(),
     )
   ];
 }

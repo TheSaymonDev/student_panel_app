@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer' as developer;
 
+import 'package:student_panel/screens/leaderboard_screen/models/leaderboard_user_model.dart';
+
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -373,7 +375,91 @@ class FirebaseService {
     }
   }
 
-  /// Sign Out
+  // Read Leaderboard Data to Firebase
+  Future<Map<String, dynamic>> readLeaderboardData({
+    required String classId,
+    required String filter,
+  }) async {
+    try {
+      print('Start reading leaderboard data for classId: $classId and filter: $filter');
+
+      final usersSnapshot = await _firestore
+          .collection('classes')
+          .doc(classId)
+          .collection('users')
+          .get();
+
+      print('Total users found: ${usersSnapshot.docs.length}');
+
+      DateTime now = DateTime.now();
+      DateTime startDate;
+
+      if (filter == 'today') {
+        startDate = DateTime(now.year, now.month, now.day);
+      } else if (filter == 'week') {
+        startDate = now.subtract(Duration(days: now.weekday - 1));
+      } else if (filter == 'month') {
+        startDate = DateTime(now.year, now.month, 1);
+      } else {
+        startDate = DateTime(2000);
+      }
+
+      print('Start date for filter "$filter": $startDate');
+
+      List<LeaderboardUserModel> leaderboard = [];
+
+      for (final userDoc in usersSnapshot.docs) {
+        final userId = userDoc.id;
+        final username = userDoc.data()['name'] ?? 'Unknown';
+        final photoUrl = userDoc.data()['photoUrl'] ?? '';
+
+        print('Processing user: $username ($userId)');
+
+        final resultsSnapshot = await _firestore
+            .collection('classes')
+            .doc(classId)
+            .collection('users')
+            .doc(userId)
+            .collection('results')
+            .where('attemptedAt', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+            .get();
+
+        print('  → Results found: ${resultsSnapshot.docs.length}');
+
+        double totalScore = 0;
+        for (final doc in resultsSnapshot.docs) {
+          final score = (doc.data()['correctAnswers'] ?? 0).toDouble();
+          print('    → Score: $score');
+          totalScore += score;
+        }
+
+        leaderboard.add(LeaderboardUserModel(
+          userId: userId,
+          username: username,
+          totalScore: totalScore.toInt(),
+        ));
+      }
+
+      leaderboard.sort((a, b) => b.totalScore.compareTo(a.totalScore));
+      print('Leaderboard sorted, total entries: ${leaderboard.length}');
+
+      return {
+        'success': true,
+        'data': leaderboard,
+      };
+    } catch (e) {
+      print('Exception: $e');
+      return {
+        'success': false,
+        'message': 'Failed to fetch leaderboard: ${e.toString()}'
+      };
+    }
+  }
+
+
+
+
+/// Sign Out
   Future<void> signOut() async {
     try {
       await _auth.signOut();

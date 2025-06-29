@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:student_panel/screens/explore_screen/controllers/weekly_performance_controller.dart';
+import 'package:student_panel/screens/home_screen/controllers/weekly_performance_controller.dart';
 import 'package:student_panel/utils/app_colors.dart';
 import 'package:student_panel/utils/app_const_functions.dart';
 

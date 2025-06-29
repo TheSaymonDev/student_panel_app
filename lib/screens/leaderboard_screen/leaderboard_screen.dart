@@ -1,106 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:student_panel/screens/leaderboard_screen/controllers/leaderboard_controller.dart';
+import 'package:student_panel/screens/leaderboard_screen/widgets/today_widget.dart';
+import 'package:student_panel/widgets/custom_app_bar/custom_app_bar_with_title.dart';
 
-class LeaderboardScreen extends StatelessWidget {
-  final List<Map<String, dynamic>> leaderboardData = [
-    {
-      'subject': 'Mathematics',
-      'topics': [
-        {
-          'topic': 'Algebra',
-          'leaderboard': [
-            {'rank': 1, 'name': 'John Doe', 'score': 95},
-            {'rank': 2, 'name': 'Jane Smith', 'score': 90},
-            {'rank': 3, 'name': 'Emily Davis', 'score': 85},
-          ],
-        },
-        {
-          'topic': 'Geometry',
-          'leaderboard': [
-            {'rank': 1, 'name': 'Michael Lee', 'score': 88},
-            {'rank': 2, 'name': 'Sophia Wilson', 'score': 80},
-          ],
-        },
-      ],
-    },
-    {
-      'subject': 'Science',
-      'topics': [
-        {
-          'topic': 'Physics',
-          'leaderboard': [
-            {'rank': 1, 'name': 'Robert Brown', 'score': 93},
-            {'rank': 2, 'name': 'Linda Scott', 'score': 89},
-          ],
-        },
-      ],
-    },
-  ];
+class LeaderboardScreen extends StatefulWidget {
+  const LeaderboardScreen({super.key});
 
-   LeaderboardScreen({super.key});
+  @override
+  State<LeaderboardScreen> createState() => _LeaderboardScreenState();
+}
+
+class _LeaderboardScreenState extends State<LeaderboardScreen>
+    with TickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  final _leaderboardController = Get.find<LeaderboardController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Leaderboard')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildSubjectDropdown(),
-            SizedBox(height: 16),
-            Expanded(child: _buildTopicLeaderboard()),
-          ],
-        ),
+      appBar: CustomAppBarWithTitle(
+          onPressed: () => Get.back(), title: 'Leaderboard'),
+      body: Column(
+        children: [
+          TabBar(
+            dividerColor: Colors.transparent,
+            controller: _tabController,
+            onTap: (index) {
+              final filters = ['today', 'week', 'month'];
+             _leaderboardController.fetchLeaderboard(filters[index]);
+            },
+            tabs: const <Widget>[
+              Tab(text: 'Today'),
+              Tab(text: 'Week'),
+              Tab(text: 'Month'),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                LeaderboardWidget(),
+                LeaderboardWidget(),
+                LeaderboardWidget(),
+              ],
+            ),
+          )
+        ],
       ),
     );
-  }
-
-  Widget _buildSubjectDropdown() {
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        labelText: 'Select Subject',
-        border: OutlineInputBorder(),
-      ),
-      items: leaderboardData.map((subject) {
-        return DropdownMenuItem<String>(
-          value: subject['subject'] as String,
-          child: Text(subject['subject'] as String),
-        );
-      }).toList(),
-      onChanged: (value) {
-        // Update selected subject and refresh topic list
-      },
-    );
-  }
-
-
-  Widget _buildTopicLeaderboard() {
-    final selectedSubject = leaderboardData[0]; // Replace with state management
-    final topics = selectedSubject['topics'] as List;
-
-    return ListView.builder(
-      itemCount: topics.length,
-      itemBuilder: (context, index) {
-        final topic = topics[index];
-        return ExpansionTile(
-          title: Text(topic['topic']),
-          children: _buildLeaderboardItems(topic['leaderboard']),
-        );
-      },
-    );
-  }
-
-  List<Widget> _buildLeaderboardItems(List<dynamic> leaderboard) {
-    return leaderboard.map((entry) {
-      return ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.blue,
-          child: Text('#${entry['rank']}'),
-        ),
-        title: Text(entry['name']),
-        subtitle: Text('Score: ${entry['score']}'),
-        trailing: Icon(Icons.star, color: Colors.yellow),
-      );
-    }).toList();
   }
 }
